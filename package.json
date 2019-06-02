@@ -2,8 +2,9 @@
   "name": "ivandack-coap-cli",
   "version": "1.0.0",
   "description": "Cliente CoAP para las motas Z1 de la práctica 4 de IoT (UNLP)",
-  "main": "index.js",
+  "main": "coal-cli.js",
   "scripts": {
+    "start": "node coal-cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
