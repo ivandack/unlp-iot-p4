@@ -1,0 +1,28 @@
+{
+  "name": "ivandack-coap-cli",
+  "version": "1.0.0",
+  "description": "Cliente CoAP para las motas Z1 de la práctica 4 de IoT (UNLP)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ivandack/unlp-iot-p4.git"
+  },
+  "keywords": [
+    "iot",
+    "unlp",
+    "practicas"
+  ],
+  "author": "Ivan Dackiewicz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ivandack/unlp-iot-p4/issues"
+  },
+  "homepage": "https://github.com/ivandack/unlp-iot-p4#readme",
+  "dependencies": {
+    "coap": "^0.23.1",
+    "commander": "^2.20.0"
+  }
+}
