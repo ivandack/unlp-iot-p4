@@ -8,11 +8,12 @@ commander
 
 // GET
 commander
-  .command('get <host> <path>')
+  .command('get <host> [path]')
   .description('ejecuta el método GET en el path indicado')
-  .option('-p, --port <number>', 'Puerto del servidor CoAP (por defecto 5683)', utils.parsePort, 5683)
+  .option('-p, --port <number>', 'Puerto del servidor CoAP', utils.parsePort, 5683)
   .option('-v, --verbose', 'Muestra más información al ejecutar el programa', () => 1, 0)
   .action((host, path, options) => {
+    path = path || '/';
     const port = options.port;
     path = path.startsWith('/') ? path : '/' + path;
     if (options.verbose) console.log(`Host destino: "coap://${host}:${port}${path}"`);
@@ -21,11 +22,13 @@ commander
 
 // POST
 commander
-  .command('post <host> <path> <body>')
+  .command('post <host> [path]')
   .description('ejecuta el método POST en el path indicado')
-  .option('-p, --port <number>', 'Puerto del servidor CoAP (por defecto 5683)', utils.parsePort, 5683)
+  .option('-b, --body <payload>', 'El payload a enviar', '')
+  .option('-p, --port <number>', 'Puerto del servidor CoAP', utils.parsePort, 5683)
   .option('-v, --verbose', 'Muestra más información al ejecutar el programa', () => 1, 0)
-  .action((host, path, body, options) => {
+  .action((host, path, options) => {
+    path = path || '/';
     const port = options.port;
     path = path.startsWith('/') ? path : '/' + path;
     if (options.verbose) console.log(`Host destino: "coap://${host}:${port}${path}"`);
