@@ -6,7 +6,7 @@ function getStatusCode(res) {
   return parseInt(res.code.replace('.', ''));
 }
 
-function sendReq(host, port, path, method, verbose = false) {
+function sendReq(host, port, path, method, verbose = false, body) {
   const reqParams = {
     hostname: host,
     port: port,
@@ -26,7 +26,7 @@ function sendReq(host, port, path, method, verbose = false) {
       console.log();
     });
   });
-  req.end();
+  req.end(body);
 }
 
 module.exports = {

@@ -1,5 +1,7 @@
+const colors = require('colors');
+
 function exitWithError(message, code = -1) {
-  console.error(`Error: ${message}`);
+  console.error(colors.red(`Error: ${message}`));
   process.exit(code);
 }
 
