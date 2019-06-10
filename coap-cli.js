@@ -1,7 +1,7 @@
 const commander = require('commander');
-const coap = require('./coap-lib');
-const utils = require('./utils');
 const colors = require('colors/safe');
+const coap = require('./lib/coap-lib');
+const utils = require('./lib/utils');
 
 commander
   .version('1.0.0');
