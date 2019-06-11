@@ -30,9 +30,10 @@ commander
   .action((host, path, options) => {
     path = path || '/';
     const port = options.port;
+    const body = options.body;
     path = path.startsWith('/') ? path : '/' + path;
     if (options.verbose) console.log(`Host destino: "coap://${host}:${port}${path}"`);
-    coap.sendReq(host, port, path, 'post', options.verbose);
+    coap.sendReq(host, port, path, 'post', options.verbose, body);
   });
 
 // Comando erroneo
