@@ -24,14 +24,16 @@ commander
   .version('1.0.0')
   .option('-h, --host <str>', 'Host donde se encuentra la base de datos InfluxDB', 'localhost')
   .option('-d, --database <str>', 'Base de datos a usar', 'grupo_ivandack')
+  .option('-m, -mote <str>', 'Dirección de la mota a consultar')
   .option('-v, --verbose', 'Muestra más información al ejecutar el programa', () => 1, 0)
 commander.parse(process.argv);
 const params = {
   verbose: commander.verbose,
   host: commander.host,
-  database: commander.database
+  database: commander.database,
+  mote: commander.mote,
 };
-console.log(params);
+
 const influx = new Influx.InfluxDB({
   host: params.host,
   database: params.database,
@@ -47,8 +49,8 @@ const influx = new Influx.InfluxDB({
 });
 
 const execution = new Promise((resolve, reject) => {
-  return coap.sendReq('localhost', null, '/environment/temperature', 'get', params.verbose, '123')
-    .then(val => writePoints('localhost', val));
+  return coap.sendReq(params.mote, null, '/environment/temperature', 'get', params.verbose)
+    .then(val => writePoints(params.mote, val));
 });
 
 influx.getDatabaseNames()
