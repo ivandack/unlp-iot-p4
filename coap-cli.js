@@ -3,6 +3,14 @@ const colors = require('colors/safe');
 const coap = require('./lib/coap-lib');
 const utils = require('./lib/utils');
 
+function getLogger(verbose) {
+  if (verbose) {
+    return (str) => console.log(colors.green(str));
+  } else {
+    return console.log;
+  }
+}
+
 commander
   .version('1.0.0');
 
@@ -17,7 +25,9 @@ commander
     const port = options.port;
     path = path.startsWith('/') ? path : '/' + path;
     if (options.verbose) console.log(`Host destino: "coap://${host}:${port}${path}"`);
-    coap.sendReq(host, port, path, 'get', options.verbose);
+    coap.sendReq(host, port, path, 'get', options.verbose)
+      .then(responseLogger)
+      .catch(utils.exitWithError);
   });
 
 // POST
@@ -33,7 +43,9 @@ commander
     const body = options.body;
     path = path.startsWith('/') ? path : '/' + path;
     if (options.verbose) console.log(`Host destino: "coap://${host}:${port}${path}"`);
-    coap.sendReq(host, port, path, 'post', options.verbose, body);
+    coap.sendReq(host, port, path, 'post', options.verbose, body)
+      .then(responseLogger)
+      .catch(utils.exitWithError);
   });
 
 // Comando erroneo
@@ -43,6 +55,8 @@ commander
     console.error(colors.red(`El comando ${cmd} no es válido.`));
     commander.help();
   });
+
+const responseLogger = getLogger(commander.verbose);
 
 if (process.argv.length === 2) commander.help();
 commander.parse(process.argv);

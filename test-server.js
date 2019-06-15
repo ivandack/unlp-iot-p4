@@ -1,5 +1,4 @@
 const coap = require('coap');
-const utils = require('./lib/utils');
 const commander = require('commander');
 const server = coap.createServer({ type: 'udp6' });
 
@@ -17,10 +16,12 @@ server.on('request', function(req, res) {
     body += chunk;
   });
   req.on('end', () => {
-    res.write(`Method: ${req.method}\n`);
-    res.write(`URL: ${req.url}\n`);
-    if (req.method) res.write(`Body: ${body}\n`);
-    res.end();
+    if (commander.verbose) {
+      res.write(`Method: ${req.method}\n`);
+      res.write(`URL: ${req.url}\n`);
+      if (req.method) res.write(`Body: `);
+    }
+    res.end(body);
   });
 });
 
