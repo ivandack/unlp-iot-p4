@@ -1,23 +1,25 @@
 const commander = require('commander');
-const colors = require('colors/safe');
 const Influx = require('influx');
 const coap = require('./lib/coap-lib');
+const utils = require('./lib/utils');
 
 const MEASUREMENT = 'temperature';
 
-function writePoints(targetIp, tempValue) {
+async function writePoints(targetIp, tempValue) {
   if (params.verbose) console.log(`Guardando temperatura (${tempValue}) de mota ${targetIp}`);
-  influx.writePoints([{
-    measurement: MEASUREMENT,
-    tags: {
-      ipv6: targetIp
-    },
-    fields: {
-      value: tempValue
-    },
-  }]).catch(err => {
-    console.error(colors.red(`Error guardando datos en InfluxDB: ${err.stack}`));
-  });
+  try {
+    await influx.writePoints([{
+      measurement: MEASUREMENT,
+      tags: {
+        ipv6: targetIp
+      },
+      fields: {
+        value: tempValue
+      },
+    }]);
+  } catch (err) {
+    utils.exitWithError(`Error guardando datos en InfluxDB: ${err.stack}`);
+  };
 }
 
 commander
@@ -48,18 +50,21 @@ const influx = new Influx.InfluxDB({
   }]
 });
 
-const execution = new Promise((resolve, reject) => {
-  return coap.sendReq(params.mote, null, '/environment/temperature', 'get', params.verbose)
-    .then(val => writePoints(params.mote, val));
-});
-
-influx.getDatabaseNames()
-  .then(names => {
-    if (!names.includes(params.database)) {
-      return influx.createDatabase(params.database);
+async function checkDatabaseExists() {
+  const databaseNames = await influx.getDatabaseNames();
+  if (!databaseNames.includes(params.database)) {
+    try {
+      await influx.createDatabase(params.database);
+    } catch (err) {
+      utils.exitWithError(`Error creating Influx database "${params.database}"!`);
     }
-  }).catch(err => {
-    console.error(`Error creating Influx database!`);
-  }).then(() => {
-    execution.then();
-  });
+  }
+}
+
+async function execution() {
+  const val = await coap.sendReq(params.mote, null, '/environment/temperature', 'get', params.verbose);
+  return writePoints(params.mote, val);
+};
+
+checkDatabaseExists();
+execution();
