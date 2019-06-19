@@ -10,6 +10,11 @@ commander
   .option('-v, --verbose', 'Muestra más información al ejecutar el programa', () => 1, 0);
 commander.parse(process.argv);
 
+function sendMethodNotAllowed(res) {
+  if (commander.verbose) console.error(`Método desconocido para ${res.method} ${res.url}`);
+  res.writeHead(205).end();
+}
+
 function defaultResponse(req, res) {
   let body = '';
   req.on('data', (chunk) => {
@@ -31,8 +36,7 @@ function temperatureResponse(req, res) {
     if (commander.verbose) console.log(`Enviando temperatura ${temp}`);
     res.end(`${temp}`);
   } else {
-    if (commander.verbose) console.error(`Método desconocido para ${res.method} ${res.url}`);
-    res.writeHead(205).end();
+    sendMethodNotAllowed(res);
   }
 }
 
