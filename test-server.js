@@ -10,7 +10,7 @@ commander
   .option('-v, --verbose', 'Muestra más información al ejecutar el programa', () => 1, 0);
 commander.parse(process.argv);
 
-server.on('request', function(req, res) {
+function defaultResponse(req, res) {
   let body = '';
   req.on('data', (chunk) => {
     body += chunk;
@@ -23,6 +23,26 @@ server.on('request', function(req, res) {
     }
     res.end(body);
   });
+}
+
+function temperatureResponse(req, res) {
+  if (req.method === 'GET') {
+    const temp = 12 + Math.floor(Math.random() * (10 - 1)) + 1;
+    if (commander.verbose) console.log(`Enviando temperatura ${temp}`);
+    res.end(`${temp}`);
+  } else {
+    if (commander.verbose) console.error(`Método desconocido para ${res.method} ${res.url}`);
+    res.writeHead(205).end();
+  }
+}
+
+const validPaths = {
+  '/environment/temperature': temperatureResponse,
+};
+
+server.on('request', function(req, res) {
+  const handler = validPaths[req.url] || defaultResponse;
+  handler(req, res);
 });
 
 // the default CoAP port is 5683
