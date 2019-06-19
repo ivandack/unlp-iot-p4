@@ -12,7 +12,7 @@ commander.parse(process.argv);
 
 function sendMethodNotAllowed(res) {
   if (commander.verbose) console.error(`Método desconocido para ${res.method} ${res.url}`);
-  res.writeHead(205).end();
+  res.writeHead(405).end();
 }
 
 function defaultResponse(req, res) {
