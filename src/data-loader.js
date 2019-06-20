@@ -29,21 +29,22 @@ async function writePoints(influx, targetIp, tempValue) {
 
 commander
   .version('1.0.0')
-  .option('-h, --host <str>', 'Host donde se encuentra la base de datos InfluxDB', IPV6_LOCALHOST)
+  .option('-t --target <host>', 'Host donde se encuentra la base de datos InfluxDB', IPV6_LOCALHOST)
   .option('-d, --database <str>', 'Base de datos a usar', DEFAULT_DATABASE)
   .option('-m, --mote <ipv6>', 'Dirección de la mota a consultar')
   .option('-v, --verbose', 'Muestra más información al ejecutar el programa', () => 1, 0);
 commander.parse(process.argv);
-
-if (!commander.mote) utils.exitWithError('Se debe indicar la mota objetivo');
-
 const {
-  verbose, host, database, mote,
+  verbose, target, database, mote,
 } = commander;
+
+if (!mote) utils.exitWithError('Se debe indicar la mota objetivo');
 logger.setVerbose(verbose);
 
+logger.debug(`Enviando a ${target}/${database} los datos de la mota ${mote}`);
+
 const influx = new Influx.InfluxDB({
-  host,
+  target,
   database,
   schema: [
     {
@@ -69,7 +70,9 @@ function checkDatabaseExists() {
 }
 
 async function execution() {
+  logger.debug(`Tomando temperatura de mota ${mote} y enviándola a InfluxDB en ${influx}`);
   const val = await coap.get(mote, null, '/environment/temperature');
+  logger.info(`Temperatura: ${val}`);
   return writePoints(influx, mote, val);
 }
 
