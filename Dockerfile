@@ -5,5 +5,7 @@ COPY package.json ./
 COPY package-lock.json ./
 RUN npm install --production
 COPY . ./
+WORKDIR /app/src
 
-ENTRYPOINT [ "node", "coap-cli.js" ]
+ENTRYPOINT [ "node" ]
+CMD [ "coap-cli" ]
