@@ -22,7 +22,7 @@ function sendReq(host, port, path, method, body) {
   };
   return new Promise((resolve, reject) => {
     const req = coap.request(params);
-    const url = `coap://${params.host}:${params.port}${params.pathname}`;
+    const url = `coap://${params.hostname}:${params.port}${params.pathname}`;
     logger.debug(`Enviando requerimiento ${params.method.toUpperCase()} a ${url}}`);
 
     req.on('response', (res) => {
@@ -52,7 +52,7 @@ function discover(host, port) {
   };
   return new Promise((resolve, reject) => {
     const req = coap.request(params);
-    const url = `coap://${params.host}:${params.port}${params.pathname}`;
+    const url = `coap://${params.hostname}:${params.port}${params.pathname}`;
     logger.debug(`Enviando requerimiento de descubrimiento (GET ${url})`);
 
     req.on('response', (res) => {
