@@ -1,13 +1,13 @@
-const colors = require('colors');
+const logger = require('./logger');
 
 function exitWithError(message, code = -1) {
-  console.error(colors.red(`${message}`));
+  logger.error(`${message}`);
   process.exit(code);
 }
 
 function parseIntParam(value) {
-  const result = parseInt(value);
-  if (value.match(/[^0-9]/g) || isNaN(result)) {
+  const result = parseInt(value, 10);
+  if (value.match(/[^0-9]/g) || Number.isNaN(result)) {
     exitWithError(`El valor "${value}" no es un número entero.`);
   }
   return result;
@@ -22,8 +22,7 @@ function parsePort(value) {
 }
 
 module.exports = {
-  exitWithError: exitWithError,
-  parseIntParam: parseIntParam,
-  parsePort: parsePort,
+  exitWithError,
+  parseIntParam,
+  parsePort,
 };
-
