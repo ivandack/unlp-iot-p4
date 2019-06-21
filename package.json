@@ -4,11 +4,11 @@
   "description": "Cliente CoAP para las motas Z1 de la práctica 4 de IoT (UNLP)",
   "main": "coal-cli.js",
   "scripts": {
+    "coverage": "nyc npm test",
     "format": "prettier-eslint 'server/**/*.{js,json}' --write",
-    "coverage": "node ./node_modules/istanbul/lib/cli.js cover node_modules/mocha/bin/_mocha ./test/**/*spec.js",
     "lint": "eslint 'src/**/*.js' --fix",
     "start": "node coal-cli.js",
-    "test": "./node_modules/mocha/bin/mocha ./test/**/*.spec.js"
+    "test": "mocha -r ./test/mocha-init.js ./test/**/*.spec.js"
   },
   "lint-staged": {
     "**/*.js": [
@@ -55,6 +55,8 @@
     "istanbul": "^0.4.5",
     "lint-staged": "^8.2.1",
     "mocha": "^6.1.4",
-    "prettier-eslint-cli": "^5.0.0"
+    "nyc": "^14.1.1",
+    "prettier-eslint-cli": "^5.0.0",
+    "sinon": "^7.3.2"
   }
 }

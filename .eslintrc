@@ -4,5 +4,10 @@
     "mocha": true
   },
   "extends": "airbnb-base",
-  "plugins": ["promise"]
+  "plugins": ["promise"],
+  "rules": {
+    "no-param-reassign": [1, {
+      "ignorePropertyModificationsFor": ["transport"]
+    }]
+  }
 }
